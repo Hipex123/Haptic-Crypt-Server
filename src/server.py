@@ -1,4 +1,4 @@
-import socket
+import socket, re
 
 tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -15,17 +15,14 @@ while True:
         print("Client connected")
          
         while True:
-            data = connection.recv(32)
-            formattedData = str(data)[2:-1]
-            newData = list(formattedData)
+            data = connection.recv(1024)
+            formatedData = str(data)[2:-3]
 
-            for i in range(len(formattedData)):
-                if formattedData[i] == "\\":
-                    newData[i], newData[i + 1] = "", ""
+            f1 = re.sub(r"\\\\", r"\\", formatedData)
+            f2 = re.sub(r"\\\\", r"\\", f1)
 
-            formattedData = "".join(newData)
-            if len(formattedData) != 0:
-                print(formattedData)
+            if len(f2) != 0:
+                print(f2)
  
             if not data:
                 break

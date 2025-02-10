@@ -1,4 +1,4 @@
-import socket, re, threading
+import socket, threading
 
 userCount = 0
 
@@ -44,18 +44,19 @@ def handleClient(connection, client):
                 print(users)
                 continue
             
-            if str(data)[2:-1] == "CL0SE|CONNECTION|PHONE":
+            elif str(data)[2:-1] == "CL0SE|CONNECTION|PHONE":
                 removeUser(username)
                 print("USER REMOVED")
                 break
             
-            formatedData = str(data)[2:-3]
-            
-            f1 = re.sub(r'\s*\d+$', '', formatedData)
-            f2 = re.sub(r"\\\\", r"\\", f1)
-            f3 = re.sub(r"\\\\", r"\\", f2)
+            formatedData = str(data)[2:-1]
+            receiver = formatedData[formatedData.rfind("|")+1:]
+            msg = formatedData[:formatedData.rfind("|")]
 
-            sendMsg(users[username], f3)
+            try:
+                sendMsg(users[receiver], msg)
+            except:
+                continue
 
             if not data:
                 break
@@ -81,4 +82,4 @@ def startServer(ip, port):
         connection, client = tcpSocket.accept()
         threading.Thread(target=handleClient, args=(connection, client), daemon=True).start()
 
-startServer("XXXX", XXXX)
+startServer("localhost", XXXX)

@@ -50,11 +50,15 @@ def handleClient(connection, client):
                 break
             
             formatedData = str(data)[2:-1]
-            receiver = formatedData[formatedData.rfind("|")+1:]
-            msg = formatedData[:formatedData.rfind("|")]
+
+            msg = formatedData[:formatedData.find("|")-2]
+
+            receiver = formatedData[formatedData.find("|")+1:formatedData.rfind("|")]
+
+            identifier = formatedData[formatedData.rfind("|")+1:]
 
             try:
-                sendMsg(users[receiver], msg)
+                sendMsg(users[receiver], msg+"|"+identifier)
             except:
                 continue
 
@@ -67,6 +71,12 @@ def handleClient(connection, client):
         print("EXC")
         connection.close()
     finally:
+        try:
+            if (username in users):
+                removeUser(username)
+                print("USER REMOVED")
+        except:
+            pass
         print("FNL")
         print(users)
         connection.close()
@@ -82,4 +92,4 @@ def startServer(ip, port):
         connection, client = tcpSocket.accept()
         threading.Thread(target=handleClient, args=(connection, client), daemon=True).start()
 
-startServer("localhost", XXXX)
+startServer("localhost", 30000)

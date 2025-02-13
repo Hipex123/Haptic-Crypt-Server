@@ -42,6 +42,7 @@ def handleClient(connection, client):
                 userCount += 1
 
                 print(users)
+                #sendMsg(users["usr0"], "   x0196,   m109,  xdd,   x0162,   x01b6,   m64,   x019b, e,  xd9,  1, 97, 3uamsfhe6b"+"|"+"33731209164B66D5A685B71172027F725ACD41E125705CE180157C6A71F828FD")
                 continue
             
             elif str(data)[2:-1] == "CL0SE|CONNECTION|PHONE":
@@ -58,7 +59,8 @@ def handleClient(connection, client):
             identifier = formatedData[formatedData.rfind("|")+1:]
 
             try:
-                sendMsg(users[receiver], msg+"|"+identifier)
+                print(msg)
+                sendMsg(users[receiver], " "+msg+"|"+identifier)
             except:
                 continue
 
